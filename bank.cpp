@@ -2,6 +2,7 @@
 #include "./user/user.h"
 #include "./account/account.h"
 #include "./bank.h"
+#include <unordered_map>
 
 std::vector<bankActions> bankOperations{
     bankActions::ADD_ACCOUNT,
@@ -11,7 +12,12 @@ std::vector<bankActions> bankOperations{
     bankActions::TRANSFER,
     bankActions::GET_ACCOUNT_INFO,
     bankActions::GET_USER_INFO,
-    bankActions::EXIT};
+    bankActions::EXIT
+
+};
+
+std::unordered_map<int, Account> accounts;
+std::unordered_map<int, User> users;
 
 void displayMenu()
 {
@@ -50,14 +56,95 @@ void displayMenu()
     }
 }
 
+void accountCreate()
+{
+    Account account = addAccount();
+    std::cout << "IDD " << account.getId() << '\n';
+    accounts.insert({account.getId(), account});
+}
+
+void userCreate()
+{
+    User user = addUser();
+    users.insert({user.getId(), user});
+}
+
+void accountDeposit()
+{
+    int accountId, depositAmount;
+    std::cout << "Please enter your account id: " << '\n';
+    std::cin >> accountId;
+    std::cout << "Please enter amount to be deposited" << '\n';
+    std::cin >> depositAmount;
+    Account &account = accounts.at(accountId);
+    std::cout << "despoti" << account.getId() << account.getBalance() << '\n';
+    account.deposit(depositAmount);
+    std::cout << "despoti" << account.getId() << account.getBalance() << '\n';
+}
+
+void accountWithdrawal()
+{
+    int accountId, withdrawalAmount;
+    std::cout << "Please enter your account id: " << '\n';
+    std::cin >> accountId;
+    std::cout << "Please enter amount to be withdrawed" << '\n';
+    std::cin >> withdrawalAmount;
+    Account &account = accounts.at(accountId);
+    account.widthdrawal(withdrawalAmount);
+}
+
+void getAccountInfo()
+{
+    int accountId;
+    std::cout << "Please enter your account id: " << '\n';
+    std::cin >> accountId;
+    Account &account = accounts.at(accountId);
+
+    std::cout << "Account balance: " << account.getBalance() << '\n';
+    std::cout << "Transaction history: " << '\n';
+    for (Transaction transaction : account.getTransactions())
+    {
+        std::cout << transaction.getOperation() << " " << transaction.getAmount() << " " << '\n';
+    }
+    std::cout << '\n';
+}
+
+void processAction(int action)
+{
+
+    switch (action)
+    {
+
+    case static_cast<int>(bankActions::ADD_ACCOUNT):
+        accountCreate();
+        break;
+    case static_cast<int>(bankActions::ADD_USER):
+        userCreate();
+        break;
+    case static_cast<int>(bankActions::DEPOSIT):
+        accountDeposit();
+        break;
+    case static_cast<int>(bankActions::WIDTHDRAW):
+        accountWithdrawal();
+        break;
+    case static_cast<int>(bankActions::GET_ACCOUNT_INFO):
+        getAccountInfo();
+        break;
+
+    default:
+        break;
+    }
+}
+
 int main()
 {
-        int action;
+    int action;
 
     while (true)
     {
         displayMenu();
         std::cin >> action;
+        processAction(action);
     }
     return 0;
 }

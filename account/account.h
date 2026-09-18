@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 
@@ -19,12 +20,37 @@ public:
     Transaction(int p_amount, Operation p_operation) : amount{p_amount}, operation{p_operation}
     {
     }
+
+    int getAmount()
+    {
+        return amount;
+    }
+
+    std::string getOperation()
+    {
+        switch (operation)
+        {
+        case Operation::deposit:
+            return "desposit";
+            break;
+        case Operation::withdraw:
+            return "withdrawal";
+            break;
+        case Operation::transfer:
+            return "transfer";
+            break;
+
+        default:
+            break;
+        }
+    }
 };
 
 class Account
 {
 private:
-    static int id;
+    static int nextId;
+    int id;
     int balance{};
     std::string type{};
     std::vector<Transaction> transactionHistory;
@@ -32,6 +58,7 @@ private:
 public:
     Account(int p_balance, std::string p_type) : balance{p_balance}, type{p_type}
     {
+        id = ++nextId;
     }
 
     int getId()
@@ -42,6 +69,11 @@ public:
     int getBalance()
     {
         return balance;
+    }
+
+    std::vector<Transaction> getTransactions()
+    {
+        return transactionHistory;
     }
 
     Account *deposit(int amount)
@@ -63,3 +95,5 @@ public:
         return this;
     }
 };
+
+Account addAccount();

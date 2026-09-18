@@ -1,5 +1,8 @@
+#pragma once
+
+
 enum class bankActions{
-    ADD_ACCOUNT,
+    ADD_ACCOUNT=1,
     ADD_USER,
     DEPOSIT,
     WIDTHDRAW,
