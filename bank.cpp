@@ -109,6 +109,23 @@ void getAccountInfo()
     std::cout << '\n';
 }
 
+void transferFunds()
+{
+    int sourceAccountId, destinationAccountId, transferAmount;
+    std::cout << "Please enter the source account id." << '\n';
+    std::cin >> sourceAccountId;
+    std::cout << "Please enter the destination account id." << '\n';
+    std::cin >> destinationAccountId;
+    std::cout << "Please enter the transfer amount." << '\n';
+    std::cin >> transferAmount;
+
+    Account &sourceAccount = accounts.at(sourceAccountId);
+    Account &destinationAccount = accounts.at(destinationAccountId);
+
+    sourceAccount.widthdrawal(transferAmount);
+    destinationAccount.deposit(transferAmount);
+}
+
 void processAction(int action)
 {
 

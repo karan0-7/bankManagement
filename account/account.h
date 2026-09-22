@@ -13,12 +13,14 @@ class Transaction
 {
 private:
     int id;
+    static int nextId;
     int amount;
     Operation operation;
 
 public:
     Transaction(int p_amount, Operation p_operation) : amount{p_amount}, operation{p_operation}
     {
+        id = ++nextId;
     }
 
     int getAmount()
@@ -78,20 +80,23 @@ public:
 
     Account *deposit(int amount)
     {
-        balance += amount;
-        Transaction transaction{amount, Operation::deposit};
-        transactionHistory.push_back(transaction);
+        if (amount > 0)
+        {
+            balance += amount;
+            Transaction transaction{amount, Operation::deposit};
+            transactionHistory.push_back(transaction);
+        }
         return this;
     }
 
     Account *widthdrawal(int p_amount)
     {
-        if (p_amount > balance)
+        if (p_amount <= balance)
         {
+            balance -= p_amount;
+            Transaction transaction{p_amount, Operation::withdraw};
+            transactionHistory.push_back(transaction);
         }
-        balance -= p_amount;
-        Transaction transaction{p_amount, Operation::withdraw};
-        transactionHistory.push_back(transaction);
         return this;
     }
 };

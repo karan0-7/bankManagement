@@ -3,6 +3,7 @@
 #include <iostream>
 
 int Account::nextId = 0;
+int Transaction::nextId = 0;
 
 Account addAccount()
 {
